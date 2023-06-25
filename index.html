@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <meta name="theme-color" content="#23074d">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        margin: 0;
+    }
+
+    .container {
+        width: 100%;
+        height: 100%;
+        overflow: scroll;
+        scroll-snap-type: y mandatory;
+        /* position: relative; */
+    }
+
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        scroll-snap-align: start;
+    }
+
+    .overlay{
+        background: #23074d;  /* fallback for old browsers */
+        background: linear-gradient(to top, #cc5333, #23074d); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .play-button{
+        background-color: black;
+        color: rgb(255, 25, 151);
+        font-size: 2em;
+        font-family: Arial;
+        padding: 20px;
+        border: 3px solid rgb(255, 25, 151);;
+        border-radius: 20px;
+        white-space: nowrap;
+    }
+
+</style>
+<body>
+    <div class="overlay">
+        <div class="play-button" onclick="playVid(event)">2000's vibes</div>
+    </div>
+    <div class="container" onscroll="scrolled(event)">
+        <div class="wrapper" onclick="videoClick(event)">
+            <video preload="auto" playsinline loop src="./reels/kacuri.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/phone.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/tofita.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/gta.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/ketonali.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/bonibon.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/nokia.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/kitkat.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/skittles.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/skype.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/molfed.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/otulus.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/tom_jerry.mp4"></video>
+            <video preload="auto" playsinline loop src="./reels/woody.mp4"></video>
+        </div>
+    </div>
+    <script>
+        let videoHeight = document.querySelector('video').offsetHeight;
+        let vidList = Array.from(document.querySelector('.wrapper').children);
+        let nowPlays = 0;
+        let firstPlay = true;
+        // let lastPlayed = 0;
+
+        function videoClick({target}){
+            if(target.muted){
+                target.muted = false;
+            }else{
+                target.muted = true;
+            }
+        }
+
+        function playVid({target}){
+            vidList[0].play();
+            target.parentElement.remove();
+            
+        }
+
+        function scrolled({target}){
+            let scrolled = target.scrollTop;
+            snappedIndex = Math.floor(target.scrollTop / videoHeight);
+            if(!(scrolled%videoHeight)){
+                vidList[snappedIndex].muted = false;
+                nowPlays = snappedIndex
+                try{
+                    vidList[snappedIndex+1].pause();
+                    vidList[snappedIndex-1].pause();
+                }catch{}
+            }
+        }
+
+
+     
+        document.addEventListener('touchstart', (event)=>{
+    
+            if(firstPlay){
+                firstPlay = false;
+                return;
+            }
+
+            vidList[nowPlays+1].play();
+            vidList[nowPlays+1].muted = true;
+            if(nowPlays > 0){
+                vidList[nowPlays-1].play();
+                vidList[nowPlays-1].muted = true;
+            }
+        
+        })
+
+        document.addEventListener('touchend', (event)=>{
+        })
+
+
+    </script>
+</body>
+</html>
